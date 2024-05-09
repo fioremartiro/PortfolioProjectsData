@@ -1,5 +1,5 @@
 # Data Science & Analytics Portfolio
-## Welcome to my professional portfolio of data science and analytics projects. This repository is a comprehensive showcase of my skills and expertise in handling, analyzing, and visualizing data across various domains. Here, you will find projects that demonstrate my ability to extract insights and add value through data-driven decision-making.
+Welcome to my professional portfolio of data science and analytics projects. This repository is a comprehensive showcase of my skills and expertise in handling, analyzing, and visualizing data across various domains. Here, you will find projects that demonstrate my ability to extract insights and add value through data-driven decision-making.
 
 ## Projects Overview
 ### Data Exploration with SQL
