@@ -1,1 +1,169 @@
+---
+title: "Titanic Dataset Analysis"
+author: "Fiorella Martinez Rodriguez"
+date: "2024-06-24"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 5
+    toc_float: yes
+    fig_caption: true
+    df_print: paged
+    tabset: true
+    css: styles.css
+---
+
+```{r setup, include = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(ggplot2)
+library(dplyr)
+library(kableExtra)
+```
+
+<style>
+  .centered-image {
+    width: auto; /* Fixed width for the images */
+    height: auto; /* Maintain aspect ratio */
+  }
+  .image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Adjust the gap as needed */
+  }
+  
+</style>
+
+# Asignacion semana cuatro
+Esta tarea busca comprender los conceptos básicos de la generación de documentos autoreproducibles en la herramienta RStudio, utilizando el lenguaje de programación R.
+
+<div class="image-container">
+  <img src="titanic3.jpg" alt="Embarque del Titanic antes de la tragedia." class="centered-image">
+</div>
+
+- - -
+
+## Historia del Titanic
+
+El **RMS Titanic** fue un transatlántico británico operado por la compañía White Star Line. Fue construido en el astillero Harland and Wolff en Belfast y era uno de los tres transatlánticos de la clase Olympic, que pretendían ser los barcos más lujosos y seguros jamás construidos. El Titanic se hizo famoso debido a su catastrófico hundimiento durante su viaje inaugural desde Southampton a Nueva York en la noche del 14 al 15 de abril de 1912.
+
+**Puntos clave de la historia del Titanic:**
+
+1. **Construcción y Diseño**:
+   - La construcción del Titanic comenzó en *1909* y se completó en *1912*.
+   - El barco era conocido por su lujo y tecnología avanzada para la época, incluyendo características de seguridad como compartimentos estancos y puertas herméticas.
+   - El Titanic tenía *269 metros* de longitud, *28 metros* de ancho y una altura total de *53 metros* desde la quilla hasta la cubierta superior.
+
+2. **Viaje Inaugural**:
+   - El Titanic zarpó en su viaje inaugural desde *Southampton, Inglaterra*, el *10 de abril de 1912*, con paradas en *Cherburgo, Francia*, y *Queenstown (ahora Cobh), Irlanda*, antes de dirigirse hacia Nueva York.
+   - A bordo del Titanic viajaban aproximadamente *2,224 personas*, incluyendo pasajeros y tripulación. Entre los pasajeros se encontraban algunas de las personas más ricas del mundo, así como muchos emigrantes que buscaban una nueva vida en América.
+
+3. **Hundimiento**:
+   - La noche del *14 de abril de 1912*, el Titanic chocó con un iceberg en el *Atlántico Norte*.
+   - El impacto causó que se abrieran varios de los compartimentos estancos, y el barco comenzó a hundirse.
+   - En las primeras horas del *15 de abril*, el Titanic se partió en dos y se hundió por completo.
+
+4. **Pérdida de Vidas**:
+   - Más de *1,500 personas* perdieron la vida en el desastre, lo que lo convierte en una de las tragedias marítimas más mortales en tiempos de paz.
+   - Hubo varios factores que contribuyeron a la alta tasa de mortalidad, incluyendo la falta de suficientes botes salvavidas para todos a bordo y la insuficiente preparación para una evacuación de emergencia.
+
+5. **Consecuencias y Legado**:
+   - El hundimiento del Titanic llevó a importantes cambios en la normativa marítima internacional, incluyendo la creación del *Convenio Internacional para la Seguridad de la Vida Humana en el Mar (SOLAS)*.
+   - La tragedia del Titanic ha inspirado numerosas películas, libros y documentales, convirtiéndose en un símbolo duradero de los peligros de la complacencia y la falibilidad humana frente a la naturaleza.
+
+Para más información sobre el Titanic, puedes visitar los siguientes enlaces:
+
+[Titanic Wikipedia](https://en.wikipedia.org/wiki/Titanic)
+
+[Titanic by Britannica](https://www.britannica.com/topic/Titanic)
+
+
+## Imagenes reales del Titanic:
+<center>
+![Embarque del Titanic antes de la tragedia.](titanic2.jpg)
+</center>
+<br>
+<center>
+![Rescate del Titanic despues de la tragedia.](titanic1.jpg)
+</center>
+
+- - -
+
+# Visualizacion Datos
+```{r datostitanic, echo=FALSE}
+# Provide the correct path to your CSV file
+file_path <- "C:/Users/marti/OneDrive/Documents/UniversidadFidelitas/1. Introduccion al Big Data/Semana 4/Tarea/titanic.csv"
+datos <- read.csv(file_path, header = TRUE, sep = ",", dec = ".", fill = TRUE)
+datos
+```
+
+
+## Graficos {.tabset}
+
+### Gráfico 1: Supervivencia por Clase
+En este gráfico, analizamos la tasa de supervivencia de los pasajeros del Titanic en función de la clase en la que viajaban. Utilizamos un gráfico de barras para representar los datos de manera visual, mostrando el porcentaje de pasajeros que sobrevivieron y no sobrevivieron en cada clase.
+
+Para crear este gráfico, seguimos estos pasos:
+
+1. **Agrupación de Datos**: Primero agrupamos los datos por clase (`Pclass`) y si sobrevivieron o no (`Survived`).
+2. **Cálculo de Cantidades**: Calculamos la cantidad de pasajeros en cada grupo.
+3. **Cálculo de Porcentajes**: Calculamos el porcentaje de supervivencia dentro de cada clase.
+4. **Visualización**: Usamos `ggplot2` para crear un gráfico de barras, donde el eje X representa las diferentes clases, el eje Y representa el porcentaje de pasajeros y los colores representan si sobrevivieron o no.
+
+```{r graficouno, echo = FALSE}
+# Creating a plot of survival by class
+survival_by_class <- datos %>%
+  mutate(Survived = ifelse(Survived == 1, "True", "False")) %>%
+  group_by(Pclass, Survived) %>%
+  summarise(Count = n()) %>%
+  mutate(Percentage = Count / sum(Count) * 100)
+
+ggplot(survival_by_class, aes(x = factor(Pclass), y = Percentage, fill = factor(Survived))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = c("#1f77b4", "#aec7e8")) +  # Blue tones
+  labs(title = "Supervivencia por Clase", x = "Clase", y = "Porcentaje", fill = "Sobrevivió") +
+  theme_minimal()
+
+```
+
+> **Explicación:**
+Este gráfico muestra el porcentaje de supervivencia en cada clase del Titanic. Podemos observar que la tasa de supervivencia era mayor en la primera clase y menor en la tercera clase.
+
+
+### Gráfico 2: Distribución de Edad por Supervivencia
+
+En este gráfico, analizamos la distribución de las edades de los pasajeros del Titanic en función de si sobrevivieron o no. Utilizamos un histograma para representar visualmente cómo se distribuyen las edades de los pasajeros que sobrevivieron en comparación con los que no sobrevivieron.
+
+Para crear este gráfico, seguimos estos pasos:
+
+1. **Cálculo de Frecuencias**: Utilizamos los datos de edad de los pasajeros y los clasificamos en intervalos (bins) para crear un histograma.
+2. **Visualización**: Usamos `ggplot2` para crear un histograma, donde el eje X representa las edades de los pasajeros y el eje Y representa la frecuencia de pasajeros en cada intervalo de edad. Los colores representan si sobrevivieron o no.
+
+```{r grafico2, echo=FALSE}
+# Transforming Survived column and creating a plot of age distribution by survival
+datos <- datos %>%
+  mutate(Survived = ifelse(Survived == 1, "True", "False"))
+
+ggplot(datos, aes(x = Age, fill = factor(Survived))) +
+  geom_histogram(binwidth = 5, position = "dodge") +
+  scale_fill_manual(values = c("#9467bd", "#c5b0d5")) +  # Purple tones
+  labs(title = "Distribución de Edad por Supervivencia", x = "Edad", y = "Frecuencia", fill = "Sobrevivió") +
+  theme_minimal()
+```
+
+> **Explicación:** 
+Este gráfico muestra la distribución de la edad de los pasajeros en función de si sobrevivieron o no. Podemos ver que los niños tenían una mayor probabilidad de sobrevivir, lo que se refleja en el pico de la distribución de edad para los sobrevivientes en el grupo de edad más joven.
+
+- - -
+
+# Conclusiones
+En este análisis del Titanic examine la relación entre la clase de los pasajeros y su probabilidad de supervivencia, así como la distribución de la edad en relación con la supervivencia.
+
+**Supervivencia por Clase**: Los pasajeros de primera clase tenían una mayor probabilidad de sobrevivir en comparación con los de segunda y tercera clase. Esto podría deberse a las diferencias en las condiciones de alojamiento y el acceso a los botes salvavidas.
+
+**Distribución de Edad**: Los niños tenían una mayor probabilidad de sobrevivir, lo que sugiere que las políticas de evacuación pueden haber priorizado a los pasajeros más jóvenes.
+
+En resumen, la clase del pasajero y su edad fueron factores importantes que influyeron en su probabilidad de supervivencia en el Titanic. Este análisis nos ayuda a entender mejor cómo las circunstancias y las decisiones durante el desastre afectaron a los diferentes grupos de pasajeros.
+
+
 
