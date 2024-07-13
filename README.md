@@ -16,7 +16,7 @@ Welcome to my professional portfolio of data science and analytics projects. Thi
 - **Pandas for Data Manipulation:** These projects focus on the use of Pandas for data cleaning and preparation, showcasing techniques for handling missing data, merging datasets, and preparing data for analysis or machine learning models.
 
 ## Skills Highlighted
-- **Languages and Frameworks:** Python, SQL, R (basic)
+- **Languages and Frameworks:** Python, SQL, R
 - **Tools and Technologies:** Tableau, Power BI, Pandas, Matplotlib, Seaborn, Apache Airflow
 - **Database Management:** Proficiency in SQL-based systems including PostgreSQL and MySQL, as well as experience with NoSQL databases like MongoDB.
 - **Data Analysis and Machine Learning:** Understanding of statistical analysis techniques and introductory machine learning concepts.
