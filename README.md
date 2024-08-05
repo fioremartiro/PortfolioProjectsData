@@ -24,7 +24,7 @@ Welcome to my professional portfolio of data science and analytics projects. Thi
 - **Hotel Bookings Analysis - Python**: Analysis of hotel booking data to visualize patterns such as cancellations, number of children and babies, and reservations by market segment.
 
 ## Skills Highlighted
-- **Languages and Frameworks:** Python, SQL, R
+- **Languages and Frameworks:** Python, Spark, SQL, R
 - **Tools and Technologies:** Tableau, Power BI, Pandas, Matplotlib, Seaborn, Apache Airflow
 - **Database Management:** Proficiency in SQL-based systems including PostgreSQL and MySQL, as well as experience with NoSQL databases like MongoDB.
 - **Data Analysis and Machine Learning:** Understanding of statistical analysis techniques and introductory machine learning concepts.
