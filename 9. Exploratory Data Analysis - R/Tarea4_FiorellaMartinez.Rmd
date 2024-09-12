@@ -39,12 +39,12 @@ library(stringr)
 library(lubridate)
 
 # Load the data from the provided CSV files
-oij_2017 <- read_csv("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/OIJ_estadisticas_2017.csv")
-oij_2018 <- read_csv("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/OIJ_estadisticas_2018.csv")
-oij_2019 <- read_csv("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/OIJ_estadisticas_2019.csv")
-oij_2020 <- read_csv("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/OIJ_estadisticas_2020.csv")
-oij_2021 <- read_csv("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/OIJ_estadisticas_2021.csv")
-oij_2022 <- read_csv("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/OIJ_estadisticas_2022.csv")
+oij_2017 <- read_csv("OIJ_estadisticas_2017.csv")
+oij_2018 <- read_csv("OIJ_estadisticas_2018.csv")
+oij_2019 <- read_csv("OIJ_estadisticas_2019.csv")
+oij_2020 <- read_csv("OIJ_estadisticas_2020.csv")
+oij_2021 <- read_csv("OIJ_estadisticas_2021.csv")
+oij_2022 <- read_csv("OIJ_estadisticas_2022.csv")
 
 # Unify the data into a single data frame
 oij_data <- bind_rows(oij_2017, oij_2018, oij_2019, oij_2020, oij_2021, oij_2022)
@@ -116,7 +116,7 @@ if (nrow(asalto_2015) > 0) {
 
 ```{r pca-temperature-analysis, echo=FALSE, include= FALSE, warning=FALSE, message=FALSE}
 # Read the file with the correct encoding
-data <- read.csv("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/temperaturasEuropa.csv", 
+data <- read.csv("temperaturasEuropa.csv", 
                  fileEncoding = "ISO-8859-1", sep = ";", stringsAsFactors = FALSE)
 
 # Check the structure and content
@@ -178,7 +178,7 @@ library(stringr)
 library(lubridate)
 
 # Load the OVSICORI Twitter data
-ovsicori_data <- readRDS("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/ovsicori.rds")
+ovsicori_data <- readRDS("ovsicori.rds")
 
 # Step 4a: Inspect the first few rows of the 'text' column to understand its structure
 sample_text <- head(ovsicori_data$text, 20)
