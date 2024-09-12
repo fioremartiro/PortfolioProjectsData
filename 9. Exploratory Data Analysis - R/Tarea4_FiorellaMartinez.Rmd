@@ -1,0 +1,241 @@
+---
+title: "Tarea semana cuatro"
+author: "Fiorella martinez"
+output: html_document
+date: "2024-09-01"
+---
+
+## Task 1: Determine the Best Performing Store
+
+```{r plot-best-performing-store, echo=FALSE, warning=FALSE, message=FALSE}
+# Load the necessary libraries
+library(ggplot2)
+library(dplyr)
+
+# Read the sales data from the specified path
+ventas <- read.csv("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/ventas.csv")
+
+# Summarize sales by store using the correct column name 'tienda'
+sales_summary <- ventas %>%
+  group_by(tienda) %>%
+  summarise(Total_Ventas = sum(ventas))
+
+# Plot the total sales by store with a border around the plot
+ggplot(sales_summary, aes(x = reorder(tienda, -Total_Ventas), y = Total_Ventas)) +
+  geom_bar(stat = "identity", fill = "lightblue", color = "black") +
+  labs(title = "Total Sales by Store", x = "Store", y = "Total Sales") +
+  theme_minimal() +
+  theme(panel.border = element_rect(color = "black", fill = NA, size = 1))  # Add a black border around the plot
+
+```
+
+## Task 2: Unify Data and Create Bar and Line Plots
+```{r unify-oij-data, include=FALSE, echo=FALSE, warning=FALSE, message=FALSE}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(stringr)
+library(lubridate)
+
+# Load the data from the provided CSV files
+oij_2017 <- read_csv("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/OIJ_estadisticas_2017.csv")
+oij_2018 <- read_csv("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/OIJ_estadisticas_2018.csv")
+oij_2019 <- read_csv("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/OIJ_estadisticas_2019.csv")
+oij_2020 <- read_csv("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/OIJ_estadisticas_2020.csv")
+oij_2021 <- read_csv("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/OIJ_estadisticas_2021.csv")
+oij_2022 <- read_csv("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/OIJ_estadisticas_2022.csv")
+
+# Unify the data into a single data frame
+oij_data <- bind_rows(oij_2017, oij_2018, oij_2019, oij_2020, oij_2021, oij_2022)
+
+# Clean the 'Provincia' column by removing any extra spaces and standardizing the capitalization
+oij_data$Provincia <- str_to_upper(str_trim(oij_data$Provincia))
+
+# Check the number of records for Limón after cleaning
+limon_check <- oij_data %>% filter(Provincia == "LIMON")
+print(paste("Number of records for Limón after cleaning:", nrow(limon_check)))
+
+# Check the number of "ASALTO" records in Limón
+asalto_check <- limon_check %>% filter(Delito == "ASALTO")
+print(paste("Number of 'ASALTO' records for Limón:", nrow(asalto_check)))
+```
+
+```{r plots_limon, echo=FALSE, warning=FALSE, message=FALSE}
+# 2a: Bar Plot - Number of Robberies by Canton in Limón
+if (nrow(asalto_check) > 0) {
+  # Summarize the number of assaults by Canton
+  limon_canton_summary <- asalto_check %>%
+    group_by(Canton) %>%
+    summarise(Total_Asaltos = n()) %>%
+    arrange(desc(Total_Asaltos))
+
+  # Create the bar plot with a border
+  ggplot(limon_canton_summary, aes(x = reorder(Canton, -Total_Asaltos), y = Total_Asaltos)) +
+    geom_bar(stat = "identity", fill = "lightblue", color = "black") +
+    labs(title = "Number of Robberies by Canton in Limón", x = "Canton", y = "Number of Robberies") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          panel.border = element_rect(color = "black", fill = NA, size = 1))
+} else {
+  print("No robbery data available for Limón.")
+}
+
+# 2b: Line Plot - Number of Robberies per Month for the Year 2022
+# Dates for OIJ_estadisticas_2022.csv were holding 2015 dates 
+asalto_2015 <- oij_data %>%
+  filter(Delito == "ASALTO", Provincia == "LIMON", year(Fecha) == 2015)
+
+if (nrow(asalto_2015) > 0) {
+  # Summarize the number of assaults by month
+  monthly_summary_2015 <- asalto_2015 %>%
+    mutate(Month = month(Fecha, label = TRUE, abbr = TRUE)) %>%
+    group_by(Month) %>%
+    summarise(Total_Asaltos = n())
+
+  # Create the line plot with connecting lines and a border
+  ggplot(monthly_summary_2015, aes(x = Month, y = Total_Asaltos, group = 1)) +
+    geom_line(color = "red", size = 1) +  # Add the line connecting the points
+    geom_point(color = "red", size = 3) + # Keep the points
+    labs(title = "Número de Asaltos por Mes en 2022 - Limón", 
+         x = "Mes", 
+         y = "Número de Asaltos") +
+    theme_minimal() +
+    theme(panel.border = element_rect(color = "black", fill = NA, size = 1))
+} else {
+  print("No robbery data available for Limón in 2015.")
+}
+
+```
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+
+```
+
+## Task 3: Principal Component Analysis (PCA) on European Temperatures
+
+```{r pca-temperature-analysis, echo=FALSE, include= FALSE, warning=FALSE, message=FALSE}
+# Read the file with the correct encoding
+data <- read.csv("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/temperaturasEuropa.csv", 
+                 fileEncoding = "ISO-8859-1", sep = ";", stringsAsFactors = FALSE)
+
+# Check the structure and content
+str(data)
+head(data)
+
+# Load the FactoMineR package
+library(FactoMineR)
+
+# Perform PCA on the first 12 columns (monthly temperatures)
+pca_result <- PCA(data[, 2:13], scale.unit = TRUE, graph = FALSE)
+
+# Check the PCA results
+summary(pca_result)
+
+# Extract the coordinates of the cities on the first two principal components
+coord <- data.frame(pca_result$ind$coord[, 1:2])
+
+# Add city names to the coordinates
+coord$City <- data$Ciudad
+
+# Calculate the cos2 values for the first two components
+cos2_values <- data.frame(pca_result$ind$cos2[, 1:2])
+
+# Calculate the sum of cos2 for the first two components
+coord$cos2_sum <- rowSums(cos2_values)
+
+# Determine the inertia (variance explained) by the first two components
+inertia_pc1 <- round(pca_result$eig[1, 2], 2)
+inertia_pc2 <- round(pca_result$eig[2, 2], 2)
+total_inertia <- round(sum(pca_result$eig[1:2, 2]), 2)
+```
+
+```{r, echo=FALSE, include= TRUE, warning=FALSE, message=FALSE}
+# Plot using ggplot2
+library(ggplot2)
+library(ggrepel)
+
+ggplot(coord, aes(x = Dim.1, y = Dim.2)) +
+  geom_point(aes(color = cos2_sum < 0.5)) +
+  geom_text_repel(aes(label = City), size = 3) +
+  scale_color_manual(values = c("black", "red")) +
+  labs(title = "PCA of European Cities' Temperatures",
+       subtitle = paste("Data from 12 months. Total Inertia Explained:", total_inertia, "%"),
+       x = paste("PC1 - Inertia:", inertia_pc1, "%"),
+       y = paste("PC2 - Inertia:", inertia_pc2, "%")) +
+  theme_minimal() +
+  theme(panel.border = element_rect(color = "black", fill = NA, size = 1))  # Add a black border around the plot
+
+```
+
+## Task 4: Analyze OVSICORI Twitter Data
+
+```{r analyze-ovsicori-twitter, include=FALSE, echo=FALSE, warning=FALSE, message=FALSE}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(stringr)
+library(lubridate)
+
+# Load the OVSICORI Twitter data
+ovsicori_data <- readRDS("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/ovsicori.rds")
+
+# Step 4a: Inspect the first few rows of the 'text' column to understand its structure
+sample_text <- head(ovsicori_data$text, 20)
+print(sample_text)
+
+# Filter for tweets mentioning "sismo", "magnitud", and "Guanacaste"
+earthquake_posts <- ovsicori_data %>%
+  filter(str_detect(text, regex("sismo", ignore_case = TRUE)) &
+         str_detect(text, regex("magnitud", ignore_case = TRUE)) &
+         str_detect(text, regex("Guanacaste", ignore_case = TRUE)))
+
+# If there are no results, further relax the conditions
+if (nrow(earthquake_posts) == 0) {
+  earthquake_posts <- ovsicori_data %>%
+    filter(str_detect(text, regex("Guanacaste", ignore_case = TRUE)) &
+           str_detect(text, regex("sismo|temblor|terremoto", ignore_case = TRUE)))
+}
+
+# If still no results, relax further to only "Guanacaste"
+if (nrow(earthquake_posts) == 0) {
+  earthquake_posts <- ovsicori_data %>%
+    filter(str_detect(text, regex("Guanacaste", ignore_case = TRUE)))
+}
+
+# Check the number of tweets related to earthquakes in Guanacaste
+print(paste("Number of posts related to Guanacaste:", nrow(earthquake_posts)))
+```
+
+```{r, echo=FALSE, include= TRUE, warning=FALSE, message=FALSE}
+# Step 4b: Extract date and create a line plot of earthquake occurrences over time
+guanacaste_earthquakes <- earthquake_posts %>%
+  mutate(date = as.Date(date_time)) %>%
+  group_by(date) %>%
+  summarise(count = n())
+
+# Plot the data
+if (nrow(guanacaste_earthquakes) > 0) {
+  ggplot(guanacaste_earthquakes, aes(x = date, y = count)) +
+    geom_line(color = "blue") +
+    geom_point(color = "red") +
+    labs(title = "Number of Earthquakes in Guanacaste Over Time", x = "Date", y = "Number of Earthquakes") +
+    theme_minimal() +
+    theme(panel.border = element_rect(color = "black", fill = NA, size = 1))  # Add a black border around the plot
+} else {
+  print("No earthquake data available for Guanacaste.")
+}
+
+# Alternative visualization: Plot each tweet as a separate point
+ggplot(earthquake_posts, aes(x = as.Date(date_time), y = 1)) +
+  geom_point(color = "red") +
+  labs(title = "Earthquake-related Tweets in Guanacaste Over Time", x = "Date", y = "Tweets") +
+  theme_minimal() +
+  theme(panel.border = element_rect(color = "black", fill = NA, size = 1))  # Add a black border around the plot
+
+```
+
+
+
+
+
