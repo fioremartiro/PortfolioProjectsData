@@ -13,7 +13,7 @@ library(ggplot2)
 library(dplyr)
 
 # Read the sales data from the specified path
-ventas <- read.csv("C:/Users/marti/Documents/UniversidadFidelitas/3. Analisis Datos - R/Semana 4/Tarea 4/ventas.csv")
+ventas <- read.csv("ventas.csv")
 
 # Summarize sales by store using the correct column name 'tienda'
 sales_summary <- ventas %>%
