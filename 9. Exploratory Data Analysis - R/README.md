@@ -5,7 +5,6 @@ This project focuses on exploratory data analysis (EDA) using R. The project con
 
 ## Files Included
 - **Ejercicio práctico 4**: Practical exercise applying concepts from the course.
-- **Tarea4_FiorellaMartinez.html**: The HTML report generated from the RMarkdown document.
 - **Tarea4_FiorellaMartinez.rmd**: The RMarkdown file containing the code and analysis steps.
 
 ## Instructions
@@ -20,7 +19,7 @@ To run the project, ensure you have R and RStudio installed with the following p
 ### Data Collection
 The project utilizes various datasets:
 1. `ventas.csv`: Sales data used to identify the best-performing store.
-2. `OIJ_estadisticas_2017.csv` to `OIJ_estadisticas_2022.csv`: Crime statistics for different years, merged for analysis.
+2. `OIJ_estadisticas_2017.csv`, `OIJ_estadisticas_2018.csv`, `OIJ_estadisticas_2019.csv`, `OIJ_estadisticas_2020.csv`, `OIJ_estadisticas_2021.csv`, `OIJ_estadisticas_2022.csv`: Crime statistics for different years, merged for analysis.
 3. `temperaturaEuropa.csv`: Temperature data for European cities used for principal component analysis.
 4. `Ovsicori.rds`: A dataset containing information on Twitter posts related to seismic events in Costa Rica.
 
@@ -39,7 +38,6 @@ Through this analysis, the project demonstrates the application of R for perform
 
 ### Submission
 Submit the following:
-- HTML report (`Tarea4_FiorellaMartinez.html`).
 - RMarkdown file (`Tarea4_FiorellaMartinez.rmd`).
 
 Thank you for visiting my portfolio. Please feel free to explore the projects, and don't hesitate to reach out if you have questions or need further information.
