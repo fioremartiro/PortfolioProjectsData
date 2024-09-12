@@ -74,3 +74,5 @@ This project involves performing data analysis on the Titanic dataset using R. B
 
 1. **Saving to CSV**:
    - Saved the cleaned and processed dataframe to a new CSV file.
+  
+Thank you for visiting my portfolio. Please feel free to explore the projects, and don't hesitate to reach out if you have questions or need further information.
