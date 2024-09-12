@@ -4,7 +4,6 @@
 This project focuses on exploratory data analysis (EDA) using R. The project consists of various tasks related to data collection, cleaning, and visualization, applying advanced data analysis techniques to semi-structured and unstructured data.
 
 ## Files Included
-- **Ejercicio práctico 4**: Practical exercise applying concepts from the course.
 - **Tarea4_FiorellaMartinez.rmd**: The RMarkdown file containing the code and analysis steps.
 
 ## Instructions
